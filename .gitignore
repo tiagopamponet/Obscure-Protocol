@@ -14,6 +14,7 @@
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
@@ -26,6 +27,11 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 .env*.local
 
 # vercel
@@ -34,3 +40,19 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Solana
+.anchor/
+.solana/
+test-ledger/
