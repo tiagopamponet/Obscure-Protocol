@@ -1,0 +1,287 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Label } from "@/components/ui/label"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Check, Copy, ArrowLeft } from "lucide-react"
+import { PublicKey } from "@solana/web3.js"
+import { handleDeposit, type DepositProgress } from "@/scripts/deposit"
+
+interface DepositModalProps {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}
+
+type DepositStep =
+  | "select-amount"
+  | "sending-to-contract"
+  | "waiting-for-pda"
+  | "generating-code"
+  | "writing-proof"
+  | "complete"
+
+export function DepositModal({ open, onOpenChange }: DepositModalProps) {
+  const [amount, setAmount] = useState<string>("0.001")
+  const [step, setStep] = useState<DepositStep>("select-amount")
+  const [saveCode, setSaveCode] = useState(false)
+  const [couponCode, setCouponCode] = useState("")
+  const [publicKey, setPublicKey] = useState<PublicKey | null>(null)
+  const [connected, setConnected] = useState(false)
+
+  // Check wallet connection on mount and when modal opens
+  useEffect(() => {
+    const checkWallet = async () => {
+      if (window.phantom?.solana?.isConnected) {
+        const pk = window.phantom.solana.publicKey
+        if (pk) {
+          setPublicKey(new PublicKey(pk.toString()))
+          setConnected(true)
+        }
+      } else {
+        setConnected(false)
+        setPublicKey(null)
+      }
+    }
+    checkWallet()
+
+    // Add event listeners for wallet connection changes
+    const handleConnect = () => {
+      const pk = window.phantom?.solana?.publicKey
+      if (pk) {
+        setPublicKey(new PublicKey(pk.toString()))
+        setConnected(true)
+      }
+    }
+
+    const handleDisconnect = () => {
+      setConnected(false)
+      setPublicKey(null)
+    }
+
+    window.phantom?.solana?.on("connect", handleConnect)
+    window.phantom?.solana?.on("disconnect", handleDisconnect)
+
+    return () => {
+      window.phantom?.solana?.removeListener("connect", handleConnect)
+      window.phantom?.solana?.removeListener("disconnect", handleDisconnect)
+    }
+  }, [open])
+
+  const handleDepositClick = async () => {
+    if (!publicKey) return
+
+    try {
+      const code = await handleDeposit(publicKey, (progress) => {
+        setStep(progress.step)
+        if (progress.couponCode) {
+          setCouponCode(progress.couponCode)
+        }
+      })
+    } catch (error) {
+      console.error("Deposit failed:", error)
+      setStep("select-amount")
+    }
+  }
+
+  const resetModal = () => {
+    setStep("select-amount")
+    setAmount("0.001")
+    setSaveCode(false)
+    setCouponCode("")
+  }
+
+  const handleClose = () => {
+    onOpenChange(false)
+    setTimeout(resetModal, 300)
+  }
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(couponCode)
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="sm:max-w-[90%] md:max-w-[600px] rounded-2xl bg-gradient-to-b from-white to-pink-50 dark:from-slate-900 dark:to-purple-950 border border-purple-100 dark:border-purple-800 shadow-lg shadow-purple-200/20 dark:shadow-purple-900/20">
+        <div className="absolute inset-0 bg-sakura-pattern opacity-[0.03] rounded-2xl pointer-events-none"></div>
+
+        <DialogHeader className="relative z-10">
+          <DialogTitle className="text-2xl font-serif text-center text-slate-800 dark:text-white flex items-center justify-center gap-2">
+            {step === "select-amount" && "🕊️ Deposit Your SOL"}
+            {step !== "select-amount" && step !== "complete" && "Processing Your Deposit"}
+            {step === "complete" && "✨ Deposit Complete"}
+          </DialogTitle>
+          <DialogDescription className="text-center text-slate-600 dark:text-slate-300 font-zen">
+            {step === "select-amount" && "Let your assets vanish peacefully into the chain"}
+            {step !== "select-amount" && step !== "complete" && "Your transaction is being processed..."}
+            {step === "complete" && "Your one-time coupon code has been generated"}
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="relative z-10 py-4">
+          {step === "select-amount" && (
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <h3 className="text-sm font-medium text-slate-700 dark:text-slate-300">Choose amount</h3>
+                <RadioGroup defaultValue={amount} onValueChange={setAmount} className="grid grid-cols-3 gap-4">
+                  <div>
+                    <RadioGroupItem value="0.001" id="amount-1" className="peer sr-only" />
+                    <Label
+                      htmlFor="amount-1"
+                      className="flex flex-col items-center justify-between rounded-xl border-2 border-purple-100 dark:border-purple-900 bg-white/50 dark:bg-slate-900/50 p-4 hover:bg-purple-50 dark:hover:bg-purple-900/30 peer-data-[state=checked]:border-purple-500 dark:peer-data-[state=checked]:border-purple-400 [&:has([data-state=checked])]:bg-purple-50 dark:[&:has([data-state=checked])]:bg-purple-900/30 transition-all duration-200"
+                    >
+                      0.001 SOL
+                    </Label>
+                  </div>
+                  <div className="relative group">
+                    <RadioGroupItem value="0.1" id="amount-2" className="peer sr-only" disabled />
+                    <Label
+                      htmlFor="amount-2"
+                      className="flex flex-col items-center justify-between rounded-xl border-2 border-purple-100 dark:border-purple-900 bg-white/50 dark:bg-slate-900/50 p-4 opacity-50 cursor-not-allowed"
+                    >
+                      0.1 SOL
+                    </Label>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 rounded-xl">
+                      <span className="text-white text-sm">Coming Soon</span>
+                    </div>
+                  </div>
+                  <div className="relative group">
+                    <RadioGroupItem value="1" id="amount-3" className="peer sr-only" disabled />
+                    <Label
+                      htmlFor="amount-3"
+                      className="flex flex-col items-center justify-between rounded-xl border-2 border-purple-100 dark:border-purple-900 bg-white/50 dark:bg-slate-900/50 p-4 opacity-50 cursor-not-allowed"
+                    >
+                      1 SOL
+                    </Label>
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50 rounded-xl">
+                      <span className="text-white text-sm">Coming Soon</span>
+                    </div>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center">
+                This transaction will be unlinkable.
+              </div>
+
+              <Button
+                onClick={handleDepositClick}
+                disabled={!connected || !publicKey}
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white disabled:opacity-50"
+              >
+                {!connected ? "Connect Wallet to Deposit" : "Deposit Anonymously"}
+              </Button>
+            </div>
+          )}
+
+          {step !== "select-amount" && step !== "complete" && (
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <div className="flex flex-col space-y-2">
+                  <div
+                    className={`flex items-center space-x-3 ${step === "sending-to-contract" || step === "waiting-for-pda" || step === "generating-code" || step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
+                  >
+                    <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
+                      {step === "sending-to-contract" ||
+                      step === "waiting-for-pda" ||
+                      step === "generating-code" ||
+                      step === "writing-proof" ? (
+                        <Check className="h-3 w-3" />
+                      ) : null}
+                    </div>
+                    <span>Sending to contract...</span>
+                  </div>
+
+                  <div
+                    className={`flex items-center space-x-3 ${step === "waiting-for-pda" || step === "generating-code" || step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
+                  >
+                    <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
+                      {step === "waiting-for-pda" || step === "generating-code" || step === "writing-proof" ? (
+                        <Check className="h-3 w-3" />
+                      ) : null}
+                    </div>
+                    <span>Waiting for PDA to assign...</span>
+                  </div>
+
+                  <div
+                    className={`flex items-center space-x-3 ${step === "generating-code" || step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
+                  >
+                    <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
+                      {step === "generating-code" || step === "writing-proof" ? <Check className="h-3 w-3" /> : null}
+                    </div>
+                    <span>Generating one-time code...</span>
+                  </div>
+
+                  <div
+                    className={`flex items-center space-x-3 ${step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
+                  >
+                    <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
+                      {step === "writing-proof" ? <Check className="h-3 w-3" /> : null}
+                    </div>
+                    <span>Writing on-chain proof...</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="h-12 flex items-center justify-center">
+                <div className="w-8 h-8 rounded-full border-4 border-purple-200 dark:border-purple-800 border-t-purple-500 dark:border-t-purple-400 animate-spin"></div>
+              </div>
+            </div>
+          )}
+
+          {step === "complete" && (
+            <div className="space-y-6">
+              <div className="p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800 text-center">
+                <div className="text-sm text-slate-600 dark:text-slate-300 mb-2">Here's your coupon code:</div>
+                <div className="font-mono text-lg font-medium text-purple-700 dark:text-purple-300 mb-2">
+                  {couponCode}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={copyToClipboard}
+                  className="text-xs border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-300"
+                >
+                  <Copy className="h-3 w-3 mr-1" /> Copy Code
+                </Button>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <Checkbox
+                  id="save-code"
+                  checked={saveCode}
+                  onCheckedChange={(checked) => setSaveCode(checked as boolean)}
+                />
+                <Label htmlFor="save-code" className="text-sm text-slate-700 dark:text-slate-300">
+                  Save your redeem code to on-chain storage, later accessed by wallet login
+                </Label>
+              </div>
+
+              <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center">
+                You must keep this code safe. It can only be used once.
+              </div>
+
+              <div className="flex space-x-3">
+                <Button
+                  variant="outline"
+                  className="flex-1 border-purple-200 dark:border-purple-800"
+                  onClick={handleClose}
+                >
+                  <ArrowLeft className="h-4 w-4 mr-2" /> Return Home
+                </Button>
+                <Button
+                  className="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                  onClick={resetModal}
+                >
+                  New Deposit
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  )
+}
