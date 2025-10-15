@@ -45,9 +45,13 @@ export default function Navbar() {
         </div>
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          <Button className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white border-none dark:from-purple-600 dark:to-pink-600 dark:hover:from-purple-700 dark:hover:to-pink-700">
-            Whisper
-          </Button>
+          <Link href="https://whisper.ghosttx.me/">
+            <Button 
+              className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white border-none dark:from-purple-600 dark:to-pink-600 dark:hover:from-purple-700 dark:hover:to-pink-700"
+            >
+              Whisper
+            </Button>
+          </Link>
         </div>
       </div>
     </nav>
