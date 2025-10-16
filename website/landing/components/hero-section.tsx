@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button"
 import Image from "next/image"
+import Link from "next/link"
 
 // Adjust this value to match your header height (e.g., 64px for typical headers)
 const HEADER_HEIGHT = 64;
@@ -42,15 +43,19 @@ export default function HeroSection() {
           <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
             Whisper your transactions into the chain — and let it travel unseen
           </p>
-          <Button className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-lg px-8 py-6 h-auto rounded-xl shadow-lg shadow-purple-200/50 dark:from-purple-600 dark:to-pink-600 dark:shadow-purple-900/30">
-            Whisper
-          </Button>
+          <Link href="https://whisper.ghosttx.me/">
+            <Button 
+              className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-lg px-8 py-6 h-auto rounded-xl shadow-lg shadow-purple-200/50 dark:from-purple-600 dark:to-pink-600 dark:shadow-purple-900/30"
+            >
+              Whisper
+            </Button>
+          </Link>
         </div>
         <div className="order-1 lg:order-2 relative">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-3xl blur-3xl"></div>
           <div className="relative">
             <Image
-              src="/1st.png"
+              src="/2st.png"
               alt="Anime-style scene with floating Solana blocks covered by a ghost cloak"
               width={600}
               height={500}
