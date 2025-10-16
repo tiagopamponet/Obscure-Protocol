@@ -1,6 +1,7 @@
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Github, BookOpen, Users } from "lucide-react"
+import Link from "next/link"
 
 export default function CommunitySection() {
   return (
@@ -29,31 +30,37 @@ export default function CommunitySection() {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <Button variant="outline" className="flex items-center gap-2">
-                <Github className="h-5 w-5" />
-                GitHub
-              </Button>
-              <Button variant="outline" className="flex items-center gap-2 text-[#1DA1F2] dark:text-[#1DA1F2]/80">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="lucide lucide-twitter"
-                >
-                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
-                </svg>
-                Twitter
-              </Button>
-              <Button variant="outline" className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5" />
-                Documentation
-              </Button>
+              <Link href="https://github.com/cadalt0/GhostTx" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <Github className="h-5 w-5" />
+                  GitHub
+                </Button>
+              </Link>
+              <Link href="https://x.com/Ghost_TX_" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="flex items-center gap-2 text-[#1DA1F2] dark:text-[#1DA1F2]/80">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    className="lucide lucide-twitter"
+                  >
+                    <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+                  </svg>
+                  Twitter
+                </Button>
+              </Link>
+              <Link href="https://pepper-beaufort-d3d.notion.site/GhostTX-Documentation-18b19f511dce80938e25fa5a6c22e42e" target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5" />
+                  Documentation
+                </Button>
+              </Link>
               <Button variant="outline" className="flex items-center gap-2">
                 <Users className="h-5 w-5" />
                 Discord
