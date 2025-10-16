@@ -27,6 +27,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
   const [walletAddress, setWalletAddress] = useState("")
   const [step, setStep] = useState<WithdrawStep>("enter-code")
   const [error, setError] = useState<string | null>(null)
+  const [signature, setSignature] = useState<string>("")
 
   const handleWithdrawClick = async () => {
     if (!couponCode || !walletAddress) return
@@ -48,6 +49,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
             break
           case "complete":
             setStep("complete")
+            setSignature(progress.signature || "")
             break
         }
       }
@@ -203,7 +205,15 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                   {walletAddress}
                 </div>
                 <div className="text-xs text-indigo-600 dark:text-indigo-400">
-                  Transaction complete! 0.001 SOL has been transferred.
+                  Transaction complete! 0.001 SOL has been transferred. View on Explorer:{" "}
+                  <a
+                    href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-500"
+                  >
+                    {signature}
+                  </a>
                 </div>
               </div>
 
