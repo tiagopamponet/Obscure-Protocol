@@ -55,7 +55,7 @@ export default function HeroSection() {
           <div className="absolute inset-0 bg-gradient-to-br from-purple-200/30 to-pink-200/30 rounded-3xl blur-3xl"></div>
           <div className="relative">
             <Image
-              src="/2st.png"
+              src="/1st.png"
               alt="Anime-style scene with floating Solana blocks covered by a ghost cloak"
               width={600}
               height={500}
