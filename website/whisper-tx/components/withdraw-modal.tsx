@@ -153,7 +153,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
-                    <span>Validating code...</span>
+                    <span>Verifying Deposit...</span>
                   </div>
 
                   <div
@@ -164,7 +164,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
-                    <span>Matching with deposit pool...</span>
+                    <span>Validating code...</span>
                   </div>
 
                   <div

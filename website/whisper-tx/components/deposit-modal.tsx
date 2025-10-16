@@ -109,7 +109,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
 
         <DialogHeader className="relative z-10">
           <DialogTitle className="text-2xl font-serif text-center text-slate-800 dark:text-white flex items-center justify-center gap-2">
-            {step === "select-amount" && "🕊️ Deposit Your SOL"}
+            {step === "select-amount" && "👻 Deposit Your SOL"}
             {step !== "select-amount" && step !== "complete" && "Processing Your Deposit"}
             {step === "complete" && "✨ Deposit Complete"}
           </DialogTitle>
@@ -191,7 +191,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
-                    <span>Sending to contract...</span>
+                    <span>Requesting SOL...</span>
                   </div>
 
                   <div
@@ -202,7 +202,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
-                    <span>Waiting for PDA to assign...</span>
+                    <span>Sending to contract...</span>
                   </div>
 
                   <div

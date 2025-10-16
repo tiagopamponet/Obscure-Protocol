@@ -42,9 +42,9 @@ export function LearnSection() {
                 <h3 className="font-serif text-lg text-slate-800 dark:text-white">How deposits work</h3>
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-300">
-                When you deposit SOL, it's sent to a Program Derived Address (PDA) on the Solana blockchain. A unique
-                one-time coupon code is generated and given to you. This code is the only way to redeem your funds, and
-                it's not stored anywhere except in your possession.
+              When you deposit SOL, it’s sent to a Program Derived Address (PDA) on the Solana blockchain, and a unique, one-time coupon code is generated onchain. You can store this coupon securely (encrypted).
+
+
               </p>
             </div>
 

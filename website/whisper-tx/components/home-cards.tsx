@@ -18,13 +18,13 @@ export function HomeCards() {
         <Card className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-purple-100 dark:border-purple-900 rounded-2xl overflow-hidden group hover:shadow-md hover:shadow-purple-200/30 dark:hover:shadow-purple-900/20 transition-all duration-300">
           <CardContent className="p-6 flex flex-col items-center text-center h-full">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-pink-100 to-purple-100 dark:from-pink-900/30 dark:to-purple-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <span className="text-2xl font-serif text-purple-800 dark:text-purple-300">裏</span>
+              <span className="text-2xl font-serif text-purple-800 dark:text-purple-300">🧧</span>
             </div>
             <h3 className="text-xl font-serif text-slate-800 dark:text-white mb-3">
-              Deposit fixed amount SOL anonymously
+            Cloak Your Transaction
             </h3>
             <p className="text-slate-600 dark:text-slate-300 mb-6 flex-grow">
-              Send SOL without revealing your identity. Get a one-time coupon code.
+            Offer SOL under the cloak of anonymity. A one-time charm will be your only echo.
             </p>
             <Button
               onClick={() => setDepositOpen(true)}
@@ -38,13 +38,13 @@ export function HomeCards() {
         <Card className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-purple-100 dark:border-purple-900 rounded-2xl overflow-hidden group hover:shadow-md hover:shadow-purple-200/30 dark:hover:shadow-purple-900/20 transition-all duration-300">
           <CardContent className="p-6 flex flex-col items-center text-center h-full">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-100 to-blue-100 dark:from-indigo-900/30 dark:to-blue-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <span className="text-2xl font-serif text-indigo-800 dark:text-indigo-300">彩</span>
+              <span className="text-2xl font-serif text-indigo-800 dark:text-indigo-300">🌀	</span>
             </div>
             <h3 className="text-xl font-serif text-slate-800 dark:text-white mb-3">
-              Redeem with your secret coupon code
+            Return from the Mist
             </h3>
             <p className="text-slate-600 dark:text-slate-300 mb-6 flex-grow">
-              Use your one-time coupon to withdraw SOL to any wallet.
+            Whisper your code. The chain will remember your offering — and return it silently.
             </p>
             <Button
               onClick={() => setWithdrawOpen(true)}
@@ -58,11 +58,11 @@ export function HomeCards() {
         <Card className="bg-white/40 dark:bg-slate-900/40 backdrop-blur-md border border-purple-100 dark:border-purple-900 rounded-2xl overflow-hidden group hover:shadow-md hover:shadow-purple-200/30 dark:hover:shadow-purple-900/20 transition-all duration-300">
           <CardContent className="p-6 flex flex-col items-center text-center h-full">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-violet-100 to-purple-100 dark:from-violet-900/30 dark:to-purple-900/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
-              <span className="text-2xl font-serif text-violet-800 dark:text-violet-300">券</span>
+              <span className="text-2xl font-serif text-violet-800 dark:text-violet-300">📜</span>
             </div>
-            <h3 className="text-xl font-serif text-slate-800 dark:text-white mb-3">Check your coupons</h3>
+            <h3 className="text-xl font-serif text-slate-800 dark:text-white mb-3">Whispers Remembered</h3>
             <p className="text-slate-600 dark:text-slate-300 mb-6 flex-grow">
-              View and manage all your saved coupon codes in one place.
+            Each code is a trace of a silent offering. Revisit the ones you've kept cloaked.
             </p>
             <Button
               onClick={() => setCouponOpen(true)}
