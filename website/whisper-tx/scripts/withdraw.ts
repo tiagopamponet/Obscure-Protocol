@@ -210,7 +210,7 @@ export async function handleWithdraw(
     onProgress({ step: "checking-memo", message: "Checking memo on chain..." })
     const isValid = await checkMemoAndRedeem(connection, timestamp)
     if (!isValid) {
-      throw new Error("No valid memo found for this code")
+      throw new Error("No valid deposit found for this code")
     }
 
     onProgress({ step: "withdrawing", message: "Withdrawing funds..." })

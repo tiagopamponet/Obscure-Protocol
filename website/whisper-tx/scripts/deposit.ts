@@ -167,7 +167,7 @@ export async function handleDeposit(
     // Send memo with the hash using the private key wallet
     await sendMemo(connection, hash)
     
-    const couponCode = `GHOST_TX_${code}`
+    const couponCode = `${code}`
     
     onProgress({ step: "complete", couponCode })
     return couponCode
