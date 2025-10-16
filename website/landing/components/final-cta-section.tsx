@@ -21,12 +21,14 @@ export default function FinalCtaSection() {
                   Whisper
                 </Button>
               </Link>
-              <Button
-                variant="outline"
-                className="text-lg px-8 py-6 h-auto rounded-xl dark:border-slate-700 dark:text-slate-300"
-              >
-                Try GhostTX
-              </Button>
+              <Link href="https://t.me/cadalt" target="_blank" rel="noopener noreferrer">
+                <Button
+                  variant="outline"
+                  className="text-lg px-8 py-6 h-auto rounded-xl dark:border-slate-700 dark:text-slate-300"
+                >
+                  Support
+                </Button>
+              </Link>
             </div>
           </div>
 
