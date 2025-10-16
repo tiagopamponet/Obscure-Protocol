@@ -17,7 +17,7 @@ export default function Home() {
             Whisper a Transaction Into the Chain
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto font-zen">
-            Send or redeem your SOL in silence — no identity, no trail.
+            Send or receive your SOL in silence — no identity, no trail.
           </p>
         </div>
 
