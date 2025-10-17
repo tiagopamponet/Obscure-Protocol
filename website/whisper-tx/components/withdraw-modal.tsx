@@ -229,7 +229,21 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
               </div>
 
               <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center">
-                GhostTX ensures no link between the original deposit and this withdrawal.
+                GhostTX ensures no link between the original deposit and this{" "}
+                {signature ? (
+                  <a
+                    href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-500"
+                    style={{ wordBreak: "break-all" }}
+                  >
+                    withdrawal
+                  </a>
+                ) : (
+                  "withdrawal"
+                )}
+                .
               </div>
 
               <div className="flex space-x-3">
