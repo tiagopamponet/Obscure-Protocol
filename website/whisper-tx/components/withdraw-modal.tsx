@@ -205,15 +205,22 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                   {walletAddress}
                 </div>
                 <div className="text-xs text-indigo-600 dark:text-indigo-400">
-                  Transaction complete! 0.001 SOL has been transferred. View on Explorer:{" "}
-                  <a
-                    href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-500"
-                  >
-                    {signature}
-                  </a>
+                  Transaction complete! 0.001 SOL has been transferred.
+                  {signature && (
+                    <>
+                      {" "}
+                      <span>View on Explorer: </span>
+                      <a
+                        href={`https://explorer.solana.com/tx/${signature}?cluster=devnet`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline text-indigo-700 dark:text-indigo-300 hover:text-indigo-900 dark:hover:text-indigo-500"
+                        style={{ wordBreak: "break-all" }}
+                      >
+                        {signature}
+                      </a>
+                    </>
+                  )}
                 </div>
               </div>
 
