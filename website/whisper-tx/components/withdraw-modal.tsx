@@ -27,6 +27,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
   const [walletAddress, setWalletAddress] = useState("")
   const [step, setStep] = useState<WithdrawStep>("enter-code")
   const [error, setError] = useState<string | null>(null)
+  const [txSignature, setTxSignature] = useState<string | null>(null)
 
   const handleWithdrawClick = async () => {
     if (!couponCode || !walletAddress) return
@@ -52,7 +53,8 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
         }
       }
 
-      await handleWithdraw(couponCode, recipient, onProgress)
+      const signature = await handleWithdraw(couponCode, recipient, onProgress)
+      setTxSignature(signature)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Withdrawal failed")
       setStep("enter-code")
@@ -63,6 +65,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
     setStep("enter-code")
     setCouponCode("")
     setError(null)
+    setTxSignature(null)
   }
 
   const handleClose = () => {
@@ -205,6 +208,18 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                 <div className="text-xs text-indigo-600 dark:text-indigo-400">
                   Transaction complete! 0.001 SOL has been transferred.
                 </div>
+                {txSignature && (
+                  <div className="mt-3">
+                    <a
+                      href={`https://explorer.solana.com/tx/${txSignature}?cluster=devnet`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 dark:hover:text-indigo-300 underline"
+                    >
+                      View on Solana Explorer
+                    </a>
+                  </div>
+                )}
               </div>
 
               <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center">
