@@ -83,6 +83,9 @@ Remember: GhostTx is designed to be user-friendly while maintaining the highest 
 
 ```
 
+## Structure of GhostTX Internal Function
+
+
 ![image](https://github.com/user-attachments/assets/d291a549-b5a5-4bbc-a3b4-2d0b44d47c14)
 
 ![image](https://github.com/user-attachments/assets/57c818c7-d8e5-48f1-906e-60ae0cf91ae9)
