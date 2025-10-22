@@ -1,4 +1,6 @@
-# GhostTx
+### GhostTx - Solana Breakout Hackathon Project
+
+GhostTx is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
 
 # GhostTX “How to Use” 
 [Read on Notion](https://pepper-beaufort-d3d.notion.site/GhostTX-How-to-Use-18b19f511dce80938e25fa5a6c22e42e)
@@ -91,4 +93,7 @@ Remember: GhostTx is designed to be user-friendly while maintaining the highest 
 ![image](https://github.com/user-attachments/assets/57c818c7-d8e5-48f1-906e-60ae0cf91ae9)
 
 ![image](https://github.com/user-attachments/assets/daae1982-b0a5-4e80-9787-3acb240372af)
+
+
+
 
