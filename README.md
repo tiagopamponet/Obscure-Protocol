@@ -9,7 +9,7 @@ Or
 
 ``` # How to Use GhostTx
 
-Welcome to GhostTx! This guide will help you understand how to use our platform.
+Welcome to [GhostTx](ghosttx.me) This guide will help you understand how to use our platform.
 
 ## Getting Started
 
@@ -93,6 +93,51 @@ Remember: GhostTx is designed to be user-friendly while maintaining the highest 
 ![image](https://github.com/user-attachments/assets/57c818c7-d8e5-48f1-906e-60ae0cf91ae9)
 
 ![image](https://github.com/user-attachments/assets/daae1982-b0a5-4e80-9787-3acb240372af)
+
+
+
+### Key Features
+
+1. **Fixed-Amount Privacy**
+   - All transactions are exactly fixed SOL
+   - Prevents amount tracing
+   - Standardized transaction size
+
+2. **PDA-Based Management**
+   - Funds held in Program Derived Address
+   - Secure fund management
+   - Controlled withdrawal system
+
+3. **Secure Withdrawals**
+   - Code-based withdrawal verification
+   - Program authority protection
+   - SHA-256 transaction verification
+   - Onchain Code verification
+
+## Technical Implementation
+
+### Smart Contract
+- Built with Anchor framework
+- Fixed-amount deposit system
+- Secure withdrawal mechanism
+- Program authority verification
+
+### Web Interface
+- React-based dashboard
+- Real-time transaction tracking
+- Secure wallet integration
+
+## Use Cases
+
+1. **Private Payments**
+   - Fixed-amount transfers
+   - Business transactions
+   - Personal privacy
+
+2. **Confidential Operations**
+   - Private payroll
+   - Anonymous transfers
+   - Secure transactions
 
 
 
