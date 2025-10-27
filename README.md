@@ -7,10 +7,12 @@
 
 Or
 
-``` # How to Use GhostTx
+ # How to Use GhostTx
 
-Welcome to [GhostTx](https:/ghosttx.me) This guide will help you understand how to use our platform.
+Welcome to GhostTx This guide will help you understand how to use our platform.
 
+Go to GhostTX Whisper [page](https:/whisper.ghosttx.me)
+```
 ## Getting Started
 
 1. **Connect Your Wallet**
