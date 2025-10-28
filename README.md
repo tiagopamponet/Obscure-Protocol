@@ -1,6 +1,6 @@
 # GhostTx - Privacy transaction layer on Solana 
 
-[GhostTx](https:/ghosttx.me) is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
+[GhostTx](https://ghosttx.me) is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
 
 # GhostTX “How to Use” 
 [Read on Notion](https://pepper-beaufort-d3d.notion.site/GhostTX-How-to-Use-18b19f511dce80938e25fa5a6c22e42e)
@@ -11,7 +11,7 @@ Or
 
 Welcome to GhostTx This guide will help you understand how to use our platform.
 
-Go to GhostTX Whisper [page](https:/whisper.ghosttx.me)
+Go to GhostTX Whisper [page](https://whisper.ghosttx.me)
 ```
 ## Getting Started
 
