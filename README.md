@@ -2,6 +2,18 @@
 
 [GhostTx](https://ghosttx.me) is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
 
+Smart contract address: [8KYeVB9iPLgy3h33BQAwUJCTWc1hvzrcpvMxSNjTXnFf](https://explorer.solana.com/address/8KYeVB9iPLgy3h33BQAwUJCTWc1hvzrcpvMxSNjTXnFf?cluster=devnet)
+
+Deposit  signature : [4eoRqTb8H3tfxEomVGrhjLgUUTcAYy8byDzJEUwtJDgqhC5eRkUEeR5cZtFcCUg12tBVxFSv8sQygsskhycbfdgz](https://explorer.solana.com/tx/4eoRqTb8H3tfxEomVGrhjLgUUTcAYy8byDzJEUwtJDgqhC5eRkUEeR5cZtFcCUg12tBVxFSv8sQygsskhycbfdgz?cluster=devnet)
+
+Deposit Onchain Code Proof : [3r12Ey5qTzpACwRKtubdaMhr25BXNfkZHE35n3V5N7rgDCA87PmMrHVSHGzW4YCTKhYzKmJaXqPRUHypkNmdgkLM](https://explorer.solana.com/tx/3r12Ey5qTzpACwRKtubdaMhr25BXNfkZHE35n3V5N7rgDCA87PmMrHVSHGzW4YCTKhYzKmJaXqPRUHypkNmdgkLM?cluster=devnet)
+
+Withdraw signature: [4Uj9iqU8hBnKs3bv6um19aQRtmphZpC13mssJ1TpUvD72aa6fqYGq1185GhNeTeMHE3f4Qe5ugsHsqtFTK5ZXn19](https://explorer.solana.com/tx/4Uj9iqU8hBnKs3bv6um19aQRtmphZpC13mssJ1TpUvD72aa6fqYGq1185GhNeTeMHE3f4Qe5ugsHsqtFTK5ZXn19?cluster=devnet)
+
+Withdraw onchain code used Proof : [2Dx1FfUemXXXWZP4LMNDpq1dfwoCBocEZNKkXVozLYeVHG1Adi4ZgpuqxGFswdFk1B8N1TZoqWn5GxsRUHpBajLb](https://explorer.solana.com/tx/2Dx1FfUemXXXWZP4LMNDpq1dfwoCBocEZNKkXVozLYeVHG1Adi4ZgpuqxGFswdFk1B8N1TZoqWn5GxsRUHpBajLb?cluster=devnet)
+
+PDA : [2pf7Zx4PitoVB5rJZvGvm2jxKVH8A68uA5StujXdkiP3](https://explorer.solana.com/address/2pf7Zx4PitoVB5rJZvGvm2jxKVH8A68uA5StujXdkiP3?cluster=devnet)
+
 # GhostTX “How to Use” 
 [Read on Notion](https://pepper-beaufort-d3d.notion.site/GhostTX-How-to-Use-18b19f511dce80938e25fa5a6c22e42e)
 
