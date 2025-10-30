@@ -7,6 +7,7 @@ import { Menu, Ghost } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useMobile } from "@/hooks/use-mobile"
+import Link from "next/link"
 
 export function Header() {
   const isMobile = useMobile()
@@ -29,12 +30,12 @@ export function Header() {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <div className="flex items-center">
+          <Link href="https://ghosttx.me" className="flex items-center hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 rounded-full bg-purple-200 dark:bg-purple-900 flex items-center justify-center mr-3">
               <Ghost className="h-6 w-6 text-purple-500" />
             </div>
             <span className="font-serif text-xl text-slate-800 dark:text-white hidden sm:inline-block">GhostTX</span>
-          </div>
+          </Link>
 
           {isMobile ? (
             <div className="flex items-center space-x-2">

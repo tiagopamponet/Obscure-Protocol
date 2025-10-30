@@ -9,6 +9,20 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Check, Copy, ArrowLeft } from "lucide-react"
 import { PublicKey } from "@solana/web3.js"
 import { handleDeposit, type DepositProgress } from "@/scripts/deposit"
+import { useToast } from "@/components/ui/use-toast"
+
+interface PhantomWindow extends Window {
+  phantom?: {
+    solana?: {
+      connect(): Promise<{ publicKey: { toString(): string } }>;
+      disconnect(): Promise<void>;
+      isConnected: boolean;
+      publicKey: { toString(): string } | null;
+      on(event: "connect" | "disconnect", callback: () => void): void;
+      removeListener(event: "connect" | "disconnect", callback: () => void): void;
+    };
+  };
+}
 
 interface DepositModalProps {
   open: boolean
@@ -24,18 +38,24 @@ type DepositStep =
   | "complete"
 
 export function DepositModal({ open, onOpenChange }: DepositModalProps) {
+  const { toast } = useToast();
   const [amount, setAmount] = useState<string>("0.001")
   const [step, setStep] = useState<DepositStep>("select-amount")
   const [saveCode, setSaveCode] = useState(false)
   const [couponCode, setCouponCode] = useState("")
   const [publicKey, setPublicKey] = useState<PublicKey | null>(null)
   const [connected, setConnected] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
+  const [isSaved, setIsSaved] = useState(false)
+  const [isCopied, setIsCopied] = useState(false)
 
   // Check wallet connection on mount and when modal opens
   useEffect(() => {
     const checkWallet = async () => {
-      if (window.phantom?.solana?.isConnected) {
-        const pk = window.phantom.solana.publicKey
+      const phantom = (window as PhantomWindow).phantom?.solana
+      if (phantom?.isConnected) {
+        const pk = phantom.publicKey
         if (pk) {
           setPublicKey(new PublicKey(pk.toString()))
           setConnected(true)
@@ -49,7 +69,8 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
 
     // Add event listeners for wallet connection changes
     const handleConnect = () => {
-      const pk = window.phantom?.solana?.publicKey
+      const phantom = (window as PhantomWindow).phantom?.solana
+      const pk = phantom?.publicKey
       if (pk) {
         setPublicKey(new PublicKey(pk.toString()))
         setConnected(true)
@@ -61,12 +82,13 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
       setPublicKey(null)
     }
 
-    window.phantom?.solana?.on("connect", handleConnect)
-    window.phantom?.solana?.on("disconnect", handleDisconnect)
+    const phantom = (window as PhantomWindow).phantom?.solana
+    phantom?.on("connect", handleConnect)
+    phantom?.on("disconnect", handleDisconnect)
 
     return () => {
-      window.phantom?.solana?.removeListener("connect", handleConnect)
-      window.phantom?.solana?.removeListener("disconnect", handleDisconnect)
+      phantom?.removeListener("connect", handleConnect)
+      phantom?.removeListener("disconnect", handleDisconnect)
     }
   }, [open])
 
@@ -91,6 +113,9 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
     setAmount("0.001")
     setSaveCode(false)
     setCouponCode("")
+    setIsSaved(false)
+    setSaveError(null)
+    setIsSaving(false)
   }
 
   const handleClose = () => {
@@ -99,7 +124,11 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
   }
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(couponCode)
+    navigator.clipboard.writeText(couponCode);
+    setIsCopied(true);
+    setTimeout(() => {
+      setIsCopied(false);
+    }, 500);
   }
 
   return (
@@ -233,7 +262,11 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
 
           {step === "complete" && (
             <div className="space-y-6">
-              <div className="p-4 rounded-xl bg-purple-50 dark:bg-purple-900/20 border border-purple-100 dark:border-purple-800 text-center">
+              <div className={`p-4 rounded-xl transition-colors duration-200 ${
+                isCopied 
+                  ? 'bg-green-100 dark:bg-green-900/20 border-green-200 dark:border-green-800' 
+                  : 'bg-purple-50 dark:bg-purple-900/20 border-purple-100 dark:border-purple-800'
+              } border text-center`}>
                 <div className="text-sm text-slate-600 dark:text-slate-300 mb-2">Here's your coupon code:</div>
                 <div className="font-mono text-lg font-medium text-purple-700 dark:text-purple-300 mb-2">
                   {couponCode}
@@ -251,12 +284,62 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
               <div className="flex items-center space-x-2">
                 <Checkbox
                   id="save-code"
-                  checked={saveCode}
-                  onCheckedChange={(checked) => setSaveCode(checked as boolean)}
+                  checked={saveCode || isSaved}
+                  disabled={isSaving || isSaved}
+                  onCheckedChange={async (checked) => {
+                    if (isSaved) {
+                      setSaveCode(false);
+                      setIsSaved(false);
+                      return;
+                    }
+                    
+                    setSaveCode(checked as boolean);
+                    setSaveError(null);
+                    
+                    if (checked && publicKey && couponCode) {
+                      setIsSaving(true);
+                      try {
+                        const response = await fetch('https://ghosttx-d9440cd585bc.herokuapp.com/api/save-code', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json',
+                          },
+                          body: JSON.stringify({
+                            walletAddress: publicKey.toString(),
+                            code: couponCode,
+                            amount: parseFloat(amount)
+                          })
+                        });
+
+                        if (!response.ok) {
+                          const errorData = await response.json();
+                          throw new Error(errorData.error || 'Failed to save code');
+                        }
+
+                        const data = await response.json();
+                        if (!data.success) {
+                          throw new Error('Failed to save code');
+                        }
+                        
+                        setIsSaved(true);
+                      } catch (error) {
+                        console.error("Error saving code:", error);
+                        setSaveError(error instanceof Error ? error.message : 'Failed to save code');
+                        setSaveCode(false);
+                      } finally {
+                        setIsSaving(false);
+                      }
+                    }
+                  }}
                 />
                 <Label htmlFor="save-code" className="text-sm text-slate-700 dark:text-slate-300">
-                  Save your redeem code to on-chain storage, later accessed by wallet login
+                  {isSaving ? 'Saving...' : isSaved ? '📜 Saved (click to unsave)' : 'Save your redeem code to database, later accessed by wallet login'}
                 </Label>
+                {saveError && (
+                  <div className="text-sm text-red-500 mt-1">
+                    {saveError}
+                  </div>
+                )}
               </div>
 
               <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center">

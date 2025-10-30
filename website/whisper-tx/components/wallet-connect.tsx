@@ -4,19 +4,17 @@ import { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Wallet, LogOut, Users } from "lucide-react"
 
-declare global {
-  interface Window {
-    phantom?: {
-      solana?: {
-        connect(): Promise<{ publicKey: { toString(): string } }>;
-        disconnect(): Promise<void>;
-        isConnected: boolean;
-        publicKey: { toString(): string } | null;
-        on(event: "connect" | "disconnect", callback: () => void): void;
-        removeListener(event: "connect" | "disconnect", callback: () => void): void;
-      };
+interface PhantomWindow extends Window {
+  phantom?: {
+    solana?: {
+      connect(): Promise<{ publicKey: { toString(): string } }>;
+      disconnect(): Promise<void>;
+      isConnected: boolean;
+      publicKey: { toString(): string } | null;
+      on(event: "connect" | "disconnect" | "accountChanged", callback: (publicKey: { toString(): string } | null) => void): void;
+      removeListener(event: "connect" | "disconnect" | "accountChanged", callback: (publicKey: { toString(): string } | null) => void): void;
     };
-  }
+  };
 }
 
 export function WalletConnect() {
@@ -24,17 +22,25 @@ export function WalletConnect() {
   const [address, setAddress] = useState("")
   const [showMenu, setShowMenu] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isMounted) return
+
     const checkPhantom = async () => {
       try {
-        if (window.phantom?.solana?.isConnected) {
-          const publicKey = window.phantom.solana.publicKey?.toString()
+        const phantom = (window as PhantomWindow).phantom?.solana
+        if (phantom?.isConnected) {
+          const publicKey = phantom.publicKey?.toString()
           if (publicKey) {
             setConnected(true)
             setAddress(publicKey)
           } else {
-            await window.phantom.solana.disconnect()
+            await phantom.disconnect()
             setConnected(false)
             setAddress("")
           }
@@ -48,11 +54,11 @@ export function WalletConnect() {
 
     checkPhantom()
 
-    const handleConnect = () => {
-      const publicKey = window.phantom?.solana?.publicKey?.toString()
-      if (publicKey) {
+    const handleConnect = (publicKey: { toString(): string } | null) => {
+      const pk = publicKey?.toString()
+      if (pk) {
         setConnected(true)
-        setAddress(publicKey)
+        setAddress(pk)
       }
     }
 
@@ -61,8 +67,21 @@ export function WalletConnect() {
       setAddress("")
     }
 
-    window.phantom?.solana?.on("connect", handleConnect)
-    window.phantom?.solana?.on("disconnect", handleDisconnect)
+    const handleAccountChange = (publicKey: { toString(): string } | null) => {
+      const pk = publicKey?.toString()
+      if (pk) {
+        setConnected(true)
+        setAddress(pk)
+      } else {
+        setConnected(false)
+        setAddress("")
+      }
+    }
+
+    const phantom = (window as PhantomWindow).phantom?.solana
+    phantom?.on("connect", handleConnect)
+    phantom?.on("disconnect", handleDisconnect)
+    phantom?.on("accountChanged", handleAccountChange)
 
     const handleClickOutside = (event: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
@@ -73,24 +92,27 @@ export function WalletConnect() {
     document.addEventListener("mousedown", handleClickOutside)
 
     return () => {
-      window.phantom?.solana?.removeListener("connect", handleConnect)
-      window.phantom?.solana?.removeListener("disconnect", handleDisconnect)
+      phantom?.removeListener("connect", handleConnect)
+      phantom?.removeListener("disconnect", handleDisconnect)
+      phantom?.removeListener("accountChanged", handleAccountChange)
       document.removeEventListener("mousedown", handleClickOutside)
     }
-  }, [])
+  }, [isMounted])
 
   const connectWallet = async () => {
+    if (!isMounted) return
     try {
-      if (!window.phantom?.solana) {
+      const phantom = (window as PhantomWindow).phantom?.solana
+      if (!phantom) {
         window.open("https://phantom.app/", "_blank")
         return
       }
 
-      if (window.phantom.solana.isConnected) {
-        await window.phantom.solana.disconnect()
+      if (phantom.isConnected) {
+        await phantom.disconnect()
       }
 
-      const { publicKey } = await window.phantom.solana.connect()
+      const { publicKey } = await phantom.connect()
       setConnected(true)
       setAddress(publicKey.toString())
     } catch (error) {
@@ -101,9 +123,11 @@ export function WalletConnect() {
   }
 
   const disconnectWallet = async () => {
+    if (!isMounted) return
     try {
-      if (window.phantom?.solana) {
-        await window.phantom.solana.disconnect()
+      const phantom = (window as PhantomWindow).phantom?.solana
+      if (phantom) {
+        await phantom.disconnect()
         setConnected(false)
         setAddress("")
         setShowMenu(false)
@@ -114,12 +138,14 @@ export function WalletConnect() {
   }
 
   const changeAccount = async () => {
+    if (!isMounted) return
     try {
-      if (window.phantom?.solana) {
-        await window.phantom.solana.disconnect()
+      const phantom = (window as PhantomWindow).phantom?.solana
+      if (phantom) {
+        await phantom.disconnect()
         await new Promise(resolve => setTimeout(resolve, 100))
         
-        const { publicKey } = await window.phantom.solana.connect()
+        const { publicKey } = await phantom.connect()
         if (publicKey) {
           setConnected(true)
           setAddress(publicKey.toString())
@@ -143,6 +169,20 @@ export function WalletConnect() {
   const formatAddress = (addr: string) => {
     if (!addr) return ""
     return `${addr.slice(0, 4)}...${addr.slice(-4)}`
+  }
+
+  if (!isMounted) {
+    return (
+      <Button
+        variant="outline"
+        className="relative overflow-hidden group transition-all duration-300 border-purple-200 dark:border-purple-800 bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm"
+      >
+        <Wallet className="h-4 w-4 mr-2 text-purple-700 dark:text-purple-400" />
+        <span className="relative z-10 text-slate-800 dark:text-slate-200">
+          Connect Wallet
+        </span>
+      </Button>
+    )
   }
 
   return (
