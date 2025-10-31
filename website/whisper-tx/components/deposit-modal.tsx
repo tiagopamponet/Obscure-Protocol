@@ -333,7 +333,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
                   }}
                 />
                 <Label htmlFor="save-code" className="text-sm text-slate-700 dark:text-slate-300">
-                  {isSaving ? 'Saving...' : isSaved ? '📜 Saved (click to unsave)' : 'Save your redeem code to database, later accessed by wallet login'}
+                  {isSaving ? 'Saving...' : isSaved ? '📜 Saved ' : 'Save your redeem code , later can be accessed by wallet sign in '}
                 </Label>
                 {saveError && (
                   <div className="text-sm text-red-500 mt-1">
