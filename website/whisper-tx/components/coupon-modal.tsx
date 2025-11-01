@@ -181,6 +181,13 @@ export function CouponModal({ open, onOpenChange }: CouponModalProps) {
         throw new Error("No wallet connected")
       }
       
+      // Clear coupons and show loading before signing
+      setLoading(true)
+      setCoupons({})
+      setDisplayedCoupons({})
+      setShowSavedCoupons(false)
+      setSignedWallet(null)
+
       const message = `Sign in to view your saved coupons for wallet: ${currentWallet}`
       const encodedMessage = new TextEncoder().encode(message)
       
@@ -205,9 +212,18 @@ export function CouponModal({ open, onOpenChange }: CouponModalProps) {
       console.error('Error in handleSignIn:', error)
       setSignedWallet(null)
       setShowSavedCoupons(false)
-      // You might want to show an error message to the user here
+    } finally {
+      setLoading(false)
     }
   }
+
+  // Clear coupons and show loading when signing in or wallet changes
+  useEffect(() => {
+    if (loading) {
+      setCoupons({})
+      setDisplayedCoupons({})
+    }
+  }, [loading])
 
   if (!isMounted) {
     return (
