@@ -37,6 +37,8 @@ type DepositStep =
   | "writing-proof"
   | "complete"
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export function DepositModal({ open, onOpenChange }: DepositModalProps) {
   const { toast } = useToast();
   const [amount, setAmount] = useState<string>("0.001")
@@ -299,7 +301,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
                     if (checked && publicKey && couponCode) {
                       setIsSaving(true);
                       try {
-                        const response = await fetch('https://ghosttx-d9440cd585bc.herokuapp.com/api/save-code', {
+                        const response = await fetch(`${API_URL}/api/save-code`, {
                           method: 'POST',
                           headers: {
                             'Content-Type': 'application/json',
@@ -333,7 +335,7 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
                   }}
                 />
                 <Label htmlFor="save-code" className="text-sm text-slate-700 dark:text-slate-300">
-                  {isSaving ? 'Saving...' : isSaved ? '📜 Saved ' : 'Save your redeem code , later can be accessed by wallet sign in '}
+                  {isSaving ? 'Saving...' : isSaved ? '📜 Saved (click to unsave)' : 'Save your redeem code to database, later accessed by wallet login'}
                 </Label>
                 {saveError && (
                   <div className="text-sm text-red-500 mt-1">

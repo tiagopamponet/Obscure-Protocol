@@ -26,6 +26,8 @@ interface CouponModalProps {
   onOpenChange: (open: boolean) => void
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 export function CouponModal({ open, onOpenChange }: CouponModalProps) {
   const [showSavedCoupons, setShowSavedCoupons] = useState(false)
   const [coupons, setCoupons] = useState<Record<string, any>>({})
@@ -124,7 +126,7 @@ export function CouponModal({ open, onOpenChange }: CouponModalProps) {
     if (!publicKey || !signedWallet || publicKey !== signedWallet) return
     setLoading(true)
     try {
-      const response = await fetch(`https://ghosttx-d9440cd585bc.herokuapp.com/api/get-codes/${publicKey}`, {
+      const response = await fetch(`${API_URL}/api/get-codes/${publicKey}`, {
         headers: {
           'X-Wallet-Address': publicKey,
           'X-Signed-Wallet': signedWallet
