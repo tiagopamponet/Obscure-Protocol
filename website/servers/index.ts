@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { Pool } from 'pg';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fetch, { Response as FetchResponse } from 'node-fetch';
 
 // Load environment variables
 dotenv.config();
@@ -21,6 +22,34 @@ const pool = new Pool({
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
 });
+
+// Transaction Stats Configuration
+const PDA_ADDRESS = "2pf7Zx4PitoVB5rJZvGvm2jxKVH8A68uA5StujXdkiP3";
+const HELIUS_API_KEY = process.env.NEXT_PUBLIC_HELIUS_API_KEY;
+const HELIUS_RPC_URL = `https://devnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}`;
+
+interface TxStats {
+  totalTx: number;
+  last24hTx: number;
+  lastUpdated: number;
+}
+
+interface SignatureResponse {
+  signature: string;
+  blockTime: number;
+}
+
+interface HeliusResponse {
+  jsonrpc: string;
+  id: number;
+  result: SignatureResponse[];
+}
+
+let cachedStats: TxStats = {
+  totalTx: 0,
+  last24hTx: 0,
+  lastUpdated: 0,
+};
 
 // Initialize DB table
 async function initializeDatabase() {
@@ -52,6 +81,46 @@ interface SaveCodeRequest {
   code: string;
   amount: number;
 }
+
+// Transaction Stats Functions
+async function fetchTxStats() {
+  let allSignatures: SignatureResponse[] = [];
+  let before: string | undefined = undefined;
+  let keepFetching = true;
+  
+  while (keepFetching) {
+    const sigRes: FetchResponse = await fetch(HELIUS_RPC_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "getSignaturesForAddress",
+        params: before ? [PDA_ADDRESS, { limit: 100, before }] : [PDA_ADDRESS, { limit: 100 }],
+      }),
+    });
+    const sigData: HeliusResponse = await sigRes.json();
+    const batch: SignatureResponse[] = sigData.result || [];
+    allSignatures = allSignatures.concat(batch);
+    if (batch.length === 100) {
+      before = batch[batch.length - 1].signature;
+    } else {
+      keepFetching = false;
+    }
+  }
+  
+  const nowSec = Math.floor(Date.now() / 1000);
+  const startOf24h = nowSec - 86400;
+  const last24hTx = allSignatures.filter(s => s.blockTime && s.blockTime >= startOf24h).length;
+  
+  cachedStats = {
+    totalTx: allSignatures.length,
+    last24hTx,
+    lastUpdated: Date.now(),
+  };
+}
+
+// API Routes
 
 // Save code API
 app.post('/api/save-code', async (req: Request<{}, {}, SaveCodeRequest>, res: Response) => {
@@ -109,14 +178,28 @@ app.get('/api/get-codes/:walletAddress', async (req: Request<{ walletAddress: st
   }
 });
 
+// Transaction stats API
+app.get('/api/tx-stats', (_req: Request, res: Response) => {
+  res.json(cachedStats);
+});
+
 // Pool error handler
 pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err);
 });
 
-// Start server
-initializeDatabase().then(() => {
+// Start server and initialize services
+async function startServer() {
+  await initializeDatabase();
+  
+  // Initial fetch of transaction stats
+  await fetchTxStats();
+  // Update transaction stats every hour
+  setInterval(fetchTxStats, 60 * 60 * 1000);
+
   app.listen(port, () => {
     console.log(`🚀 Server running on port ${port}`);
   });
-});
+}
+
+startServer();
