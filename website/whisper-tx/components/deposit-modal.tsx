@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Check, Copy, ArrowLeft } from "lucide-react"
 import { PublicKey } from "@solana/web3.js"
-import { handleDeposit, type DepositProgress } from "@/scripts/deposit"
+import { handleDeposit, type DepositProgress, RefundProcessedError } from "@/scripts/deposit"
 import { useToast } from "@/components/ui/use-toast"
 
 interface PhantomWindow extends Window {
@@ -35,7 +35,9 @@ type DepositStep =
   | "waiting-for-pda"
   | "generating-code"
   | "writing-proof"
+  | "refunding"
   | "complete"
+  | "refunded"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -51,6 +53,9 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
   const [saveError, setSaveError] = useState<string | null>(null)
   const [isSaved, setIsSaved] = useState(false)
   const [isCopied, setIsCopied] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [refundSignature, setRefundSignature] = useState<string | null>(null)
+  const [memoFailed, setMemoFailed] = useState(false)
 
   // Check wallet connection on mount and when modal opens
   useEffect(() => {
@@ -96,16 +101,32 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
 
   const handleDepositClick = async () => {
     if (!publicKey) return
+    setError(null)
+    setMemoFailed(false)
 
     try {
-      const code = await handleDeposit(publicKey, (progress) => {
+      const result = await handleDeposit(publicKey, (progress) => {
         setStep(progress.step)
         if (progress.couponCode) {
           setCouponCode(progress.couponCode)
         }
+        if (progress.step === "refunding") {
+          setMemoFailed(true)
+        }
       })
+      if (result && typeof result === 'object' && 'refundSignature' in result) {
+        setRefundSignature(result.refundSignature)
+        setStep("refunded")
+        return
+      }
+      setRefundSignature(null)
     } catch (error) {
       console.error("Deposit failed:", error)
+      toast({
+        title: "Deposit Failed",
+        description: error instanceof Error ? error.message : "An error occurred during deposit",
+        variant: "destructive"
+      })
       setStep("select-amount")
     }
   }
@@ -197,6 +218,12 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
                 This transaction will be unlinkable.
               </div>
 
+              {error && (
+                <div className="text-red-500 text-sm text-center">
+                  {error}
+                </div>
+              )}
+
               <Button
                 onClick={handleDepositClick}
                 disabled={!connected || !publicKey}
@@ -207,52 +234,52 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
             </div>
           )}
 
-          {step !== "select-amount" && step !== "complete" && (
+          {step !== "select-amount" && step !== "complete" && step !== "refunded" && (
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="flex flex-col space-y-2">
-                  <div
-                    className={`flex items-center space-x-3 ${step === "sending-to-contract" || step === "waiting-for-pda" || step === "generating-code" || step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
-                  >
+                  <div className={`flex items-center space-x-3 ${["sending-to-contract","waiting-for-pda","generating-code","writing-proof","refunding"].includes(step) ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}>
                     <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "sending-to-contract" ||
-                      step === "waiting-for-pda" ||
-                      step === "generating-code" ||
-                      step === "writing-proof" ? (
+                      {["sending-to-contract","waiting-for-pda","generating-code","writing-proof","refunding"].includes(step) ? (
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
                     <span>Requesting SOL...</span>
                   </div>
 
-                  <div
-                    className={`flex items-center space-x-3 ${step === "waiting-for-pda" || step === "generating-code" || step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
-                  >
+                  <div className={`flex items-center space-x-3 ${["waiting-for-pda","generating-code","writing-proof","refunding"].includes(step) ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}>
                     <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "waiting-for-pda" || step === "generating-code" || step === "writing-proof" ? (
+                      {["waiting-for-pda","generating-code","writing-proof","refunding"].includes(step) ? (
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
                     <span>Sending to contract...</span>
                   </div>
 
-                  <div
-                    className={`flex items-center space-x-3 ${step === "generating-code" || step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
-                  >
+                  <div className={`flex items-center space-x-3 ${["generating-code","writing-proof","refunding"].includes(step) ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}>
                     <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "generating-code" || step === "writing-proof" ? <Check className="h-3 w-3" /> : null}
+                      {["generating-code","writing-proof","refunding"].includes(step) ? <Check className="h-3 w-3" /> : null}
                     </div>
                     <span>Generating one-time code...</span>
                   </div>
 
-                  <div
-                    className={`flex items-center space-x-3 ${step === "writing-proof" ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600"}`}
-                  >
-                    <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "writing-proof" ? <Check className="h-3 w-3" /> : null}
+                  <div className={`flex items-center space-x-3 ${memoFailed ? "text-red-600 dark:text-red-400" : (["writing-proof","refunding"].includes(step) ? "text-purple-600 dark:text-purple-400" : "text-slate-400 dark:text-slate-600")}`}>
+                    <div className={`w-6 h-6 rounded-full border-2 ${memoFailed ? "border-red-600 dark:border-red-400" : "border-current"} flex items-center justify-center`}>
+                      {memoFailed ? (
+                        <span className="text-red-600 dark:text-red-400 font-bold text-lg">&#10005;</span>
+                      ) : (["writing-proof","refunding"].includes(step) ? <Check className="h-3 w-3" /> : null)}
                     </div>
                     <span>Writing on-chain proof...</span>
                   </div>
+
+                  {(["refunding"].includes(step) || memoFailed) && (
+                    <div className="flex items-center space-x-3 text-red-600 dark:text-red-400">
+                      <div className="w-6 h-6 rounded-full border-2 border-red-600 dark:border-red-400 flex items-center justify-center">
+                        <span className="font-bold text-lg">&#8635;</span>
+                      </div>
+                      <span>Processing refund...</span>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -363,6 +390,33 @@ export function DepositModal({ open, onOpenChange }: DepositModalProps) {
                   New Deposit
                 </Button>
               </div>
+            </div>
+          )}
+
+          {step === "refunded" && (
+            <div className="space-y-6 text-center">
+              <div className="p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800">
+                <div className="text-lg font-semibold text-red-700 dark:text-red-300 mb-2">Refund Processed</div>
+                <div className="text-slate-700 dark:text-slate-300 mb-2">
+                  There was a problem processing your deposit.<br />Your funds have been returned. Please try again.
+                </div>
+                {refundSignature && (
+                  <a
+                    href={`https://explorer.solana.com/tx/${refundSignature}?cluster=devnet`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block mt-2 text-purple-700 dark:text-purple-300 underline text-sm"
+                  >
+                    View Refund on Explorer
+                  </a>
+                )}
+              </div>
+              <Button
+                className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
+                onClick={() => { setStep("select-amount"); setRefundSignature(null); }}
+              >
+                Try Again
+              </Button>
             </div>
           )}
         </div>
