@@ -1,10 +1,11 @@
 import { PublicKey, Connection, Transaction, SystemProgram, TransactionInstruction, Keypair } from "@solana/web3.js"
 import { createHash } from "crypto"
+import { handleRefund } from "./refund"
 
 // Program constants
 export const PROGRAM_ID = new PublicKey("8KYeVB9iPLgy3h33BQAwUJCTWc1hvzrcpvMxSNjTXnFf")
 export const PDA_ADDRESS = new PublicKey("2pf7Zx4PitoVB5rJZvGvm2jxKVH8A68uA5StujXdkiP3")
-export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr")
+export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHh") // Invalid memo program ID for testing refund
 export const EXPECTED_AMOUNT = 1_000_000 // 0.001 SOL in lamports
 
 // Get private key from environment variable
@@ -21,8 +22,9 @@ const getPrivateKey = () => {
 }
 
 export interface DepositProgress {
-  step: "sending-to-contract" | "waiting-for-pda" | "generating-code" | "writing-proof" | "complete"
+  step: "sending-to-contract" | "waiting-for-pda" | "generating-code" | "writing-proof" | "refunding" | "complete"
   couponCode?: string
+  message?: string
 }
 
 async function sendMemo(connection: Connection, hash: string) {
@@ -72,10 +74,18 @@ function generateCode(): string {
   return `${timestamp}_${random}`
 }
 
+// Custom error for refund processed
+export class RefundProcessedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = "RefundProcessedError"
+  }
+}
+
 export async function handleDeposit(
   publicKey: PublicKey,
   onProgress: (progress: DepositProgress) => void
-): Promise<string> {
+): Promise<string | null | { refundSignature: string }> {
   try {
     if (!window.phantom?.solana) {
       throw new Error("Phantom wallet not found")
@@ -164,13 +174,27 @@ export async function handleDeposit(
 
     onProgress({ step: "writing-proof" })
     
-    // Send memo with the hash using the private key wallet
-    await sendMemo(connection, hash)
-    
-    const couponCode = `${code}`
-    
-    onProgress({ step: "complete", couponCode })
-    return couponCode
+    // Try to send memo
+    try {
+      await sendMemo(connection, hash)
+      // If memo succeeds, return the code
+      const couponCode = `${code}`
+      onProgress({ step: "complete", couponCode })
+      return couponCode
+    } catch (memoError) {
+      // If memo fails, process refund and return refund signature
+      console.error("Memo transaction failed, initiating refund:", memoError)
+      onProgress({ 
+        step: "refunding", 
+        message: "Memo failed, processing refund..."
+      })
+      let refundSignature = null
+      await handleRefund(publicKey, (progress) => {
+        if (progress.signature) refundSignature = progress.signature
+        console.log("Refund progress:", progress)
+      }).then(sig => { refundSignature = sig })
+      return { refundSignature }
+    }
 
   } catch (error) {
     console.error("Deposit failed:", error)
