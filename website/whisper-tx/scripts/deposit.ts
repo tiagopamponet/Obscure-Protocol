@@ -5,7 +5,7 @@ import { handleRefund } from "./refund"
 // Program constants
 export const PROGRAM_ID = new PublicKey("8KYeVB9iPLgy3h33BQAwUJCTWc1hvzrcpvMxSNjTXnFf")
 export const PDA_ADDRESS = new PublicKey("2pf7Zx4PitoVB5rJZvGvm2jxKVH8A68uA5StujXdkiP3")
-export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHh") // Invalid memo program ID for testing refund
+export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr") 
 export const EXPECTED_AMOUNT = 1_000_000 // 0.001 SOL in lamports
 
 // Get private key from environment variable
