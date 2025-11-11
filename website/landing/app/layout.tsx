@@ -7,7 +7,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "GhostTX - Whispered Transactions",
+  title: "Obscure Protocol - Whispered Transactions",
   description: "Transfer value without a trace on Solana",
     generator: 'v0.dev'
 }

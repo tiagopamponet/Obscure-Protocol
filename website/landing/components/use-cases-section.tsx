@@ -7,7 +7,7 @@ export default function UseCasesSection() {
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6">Use Cases</h2>
         <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-          Discover the many ways GhostTX can enhance your privacy and experience on Solana.
+          Discover the many ways Obscure Protocol can enhance your privacy and experience on Solana.
         </p>
       </div>
 

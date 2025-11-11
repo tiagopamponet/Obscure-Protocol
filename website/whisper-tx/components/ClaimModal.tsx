@@ -1,36 +1,30 @@
 "use client"
 
 import { useState } from "react"
+import { PublicKey } from "@solana/web3.js"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Check, ArrowLeft } from "lucide-react"
-import { PublicKey } from "@solana/web3.js"
+import { Check, ArrowLeft, X } from "lucide-react"
 import { handleWithdraw, WithdrawProgress } from "@/scripts/withdraw"
 
-interface WithdrawModalProps {
+type WithdrawStep = "enter-wallet" | "validating-code" | "matching-deposit" | "initiating-withdrawal" | "complete"
+
+interface ClaimModalProps {
+  code: string
   open: boolean
-  onOpenChange: (open: boolean) => void
+  onClose: () => void
 }
 
-type WithdrawStep =
-  | "enter-code"
-  | "validating-code"
-  | "matching-deposit"
-  | "initiating-withdrawal"
-  | "sending-funds"
-  | "complete"
-
-export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
-  const [couponCode, setCouponCode] = useState("")
+export default function ClaimModal({ code, open, onClose }: ClaimModalProps) {
   const [walletAddress, setWalletAddress] = useState("")
-  const [step, setStep] = useState<WithdrawStep>("enter-code")
+  const [step, setStep] = useState<WithdrawStep>("enter-wallet")
   const [error, setError] = useState<string | null>(null)
   const [txSignature, setTxSignature] = useState<string | null>(null)
 
   const handleWithdrawClick = async () => {
-    if (!couponCode || !walletAddress) return
+    if (!walletAddress) return
     setError(null)
 
     try {
@@ -53,61 +47,50 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
         }
       }
 
-      const signature = await handleWithdraw(couponCode, recipient, onProgress)
+      const signature = await handleWithdraw(code, recipient, onProgress)
       setTxSignature(signature)
     } catch (err) {
       setError(err instanceof Error ? err.message : "Withdrawal failed")
-      setStep("enter-code")
+      setStep("enter-wallet")
     }
   }
 
   const resetModal = () => {
-    setStep("enter-code")
-    setCouponCode("")
+    setStep("enter-wallet")
+    setWalletAddress("")
     setError(null)
     setTxSignature(null)
   }
 
   const handleClose = () => {
-    onOpenChange(false)
+    onClose()
     setTimeout(resetModal, 300)
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(open) => {
+      if (!open) handleClose()
+    }}>
       <DialogContent className="sm:max-w-[90%] md:max-w-[600px] rounded-2xl bg-gradient-to-b from-white to-blue-50 dark:from-slate-900 dark:to-indigo-950 border border-indigo-100 dark:border-indigo-900 shadow-lg shadow-indigo-200/20 dark:shadow-indigo-900/20">
         <div className="absolute inset-0 bg-wave-pattern opacity-[0.03] rounded-2xl pointer-events-none"></div>
 
         <DialogHeader className="relative z-10">
           <DialogTitle className="text-2xl font-serif text-center text-slate-800 dark:text-white flex items-center justify-center gap-2">
-            {step === "enter-code" && "Withdraw Your SOL"}
-            {step !== "enter-code" && step !== "complete" && "Processing Your Withdrawal"}
-            {step === "complete" && "✨ Withdrawal Complete"}
+            {step === "enter-wallet" && "Claim Your Funds"}
+            {step !== "enter-wallet" && step !== "complete" && "Processing Your Claim"}
+            {step === "complete" && "✨ Claim Complete"}
           </DialogTitle>
           <DialogDescription className="text-center text-slate-600 dark:text-slate-300 font-zen">
-            {step === "enter-code" && "Redeem your value from the silent cloak"}
-            {step !== "enter-code" && step !== "complete" && "Your transaction is being processed..."}
+            {step === "enter-wallet" && "Enter your wallet address to receive funds"}
+            {step !== "enter-wallet" && step !== "complete" && "Your transaction is being processed..."}
             {step === "complete" && "Your funds have been sent to your wallet"}
           </DialogDescription>
         </DialogHeader>
 
         <div className="relative z-10 py-4">
-          {step === "enter-code" && (
+          {step === "enter-wallet" && (
             <div className="space-y-6">
               <div className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="coupon-code" className="text-sm font-medium text-slate-700 dark:text-slate-300">
-                    Enter Coupon Code
-                  </Label>
-                  <Input
-                    id="coupon-code"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    placeholder="Enter your code"
-                    className="bg-white/50 dark:bg-slate-900/50 border-indigo-100 dark:border-indigo-800 focus:border-indigo-300 dark:focus:border-indigo-600"
-                  />
-                </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="wallet-address" className="text-sm font-medium text-slate-700 dark:text-slate-300">
                     Your Wallet Address to Receive Funds
@@ -116,6 +99,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                     id="wallet-address"
                     value={walletAddress}
                     onChange={(e) => setWalletAddress(e.target.value)}
+                    placeholder="Enter your Solana wallet address"
                     className="bg-white/50 dark:bg-slate-900/50 border-indigo-100 dark:border-indigo-800 focus:border-indigo-300 dark:focus:border-indigo-600"
                   />
                 </div>
@@ -133,61 +117,49 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
 
               <Button
                 onClick={handleWithdrawClick}
-                disabled={!couponCode || !walletAddress}
+                disabled={!walletAddress}
                 className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white disabled:opacity-50"
               >
-                Redeem Now
+                Claim Funds
               </Button>
             </div>
           )}
 
-          {step !== "enter-code" && step !== "complete" && (
+          {step !== "enter-wallet" && step !== "complete" && (
             <div className="space-y-6">
               <div className="space-y-4">
                 <div className="flex flex-col space-y-2">
                   <div
-                    className={`flex items-center space-x-3 ${step === "validating-code" || step === "matching-deposit" || step === "initiating-withdrawal" || step === "sending-funds" ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-600"}`}
+                    className={`flex items-center space-x-3 ${step === "validating-code" || step === "matching-deposit" || step === "initiating-withdrawal" ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-600"}`}
                   >
                     <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "validating-code" ||
-                      step === "matching-deposit" ||
-                      step === "initiating-withdrawal" ||
-                      step === "sending-funds" ? (
+                      {step === "validating-code" || step === "matching-deposit" || step === "initiating-withdrawal" ? (
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
-                    <span>Verifying Deposit...</span>
+                    <span>Verifying code...</span>
                   </div>
 
                   <div
-                    className={`flex items-center space-x-3 ${step === "matching-deposit" || step === "initiating-withdrawal" || step === "sending-funds" ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-600"}`}
+                    className={`flex items-center space-x-3 ${step === "matching-deposit" || step === "initiating-withdrawal" ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-600"}`}
                   >
                     <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "matching-deposit" || step === "initiating-withdrawal" || step === "sending-funds" ? (
+                      {step === "matching-deposit" || step === "initiating-withdrawal" ? (
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
-                    <span>Validating code...</span>
+                    <span>Checking deposit status...</span>
                   </div>
 
                   <div
-                    className={`flex items-center space-x-3 ${step === "initiating-withdrawal" || step === "sending-funds" ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-600"}`}
+                    className={`flex items-center space-x-3 ${step === "initiating-withdrawal" ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-600"}`}
                   >
                     <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "initiating-withdrawal" || step === "sending-funds" ? (
+                      {step === "initiating-withdrawal" ? (
                         <Check className="h-3 w-3" />
                       ) : null}
                     </div>
                     <span>Initiating withdrawal...</span>
-                  </div>
-
-                  <div
-                    className={`flex items-center space-x-3 ${step === "sending-funds" ? "text-indigo-600 dark:text-indigo-400" : "text-slate-400 dark:text-slate-600"}`}
-                  >
-                    <div className="w-6 h-6 rounded-full border-2 border-current flex items-center justify-center">
-                      {step === "sending-funds" ? <Check className="h-3 w-3" /> : null}
-                    </div>
-                    <span>Sending funds from PDA...</span>
                   </div>
                 </div>
               </div>
@@ -205,9 +177,6 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                 <div className="font-mono text-lg font-medium text-indigo-700 dark:text-indigo-300 mb-2">
                   {walletAddress}
                 </div>
-                <div className="text-xs text-indigo-600 dark:text-indigo-400">
-                  Transaction complete! 0.001 SOL has been transferred.
-                </div>
                 {txSignature && (
                   <div className="mt-3">
                     <a
@@ -223,11 +192,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
               </div>
 
               <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center">
-                Success! This coupon is now marked as used.
-              </div>
-
-              <div className="text-xs text-slate-500 dark:text-slate-400 italic text-center">
-                Obscure Protocol ensures no link between the original deposit and this withdrawal.
+                Success! This claim code is now marked as used.
               </div>
 
               <div className="flex space-x-3">
@@ -236,13 +201,7 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
                   className="flex-1 border-indigo-200 dark:border-indigo-800"
                   onClick={handleClose}
                 >
-                  <ArrowLeft className="h-4 w-4 mr-2" /> Return Home
-                </Button>
-                <Button
-                  className="flex-1 bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 text-white"
-                  onClick={resetModal}
-                >
-                  Verify Another Code
+                  <ArrowLeft className="h-4 w-4 mr-2" /> Close
                 </Button>
               </div>
             </div>
@@ -251,4 +210,4 @@ export function WithdrawModal({ open, onOpenChange }: WithdrawModalProps) {
       </DialogContent>
     </Dialog>
   )
-}
+} 

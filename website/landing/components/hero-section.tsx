@@ -70,7 +70,7 @@ export default function HeroSection() {
         <div className="order-2 lg:order-1">
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-800 dark:text-slate-100 mb-4 leading-tight">
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-pink-400 dark:from-purple-400 dark:to-pink-300">
-              GhostTX
+              Obscure Protocol
             </span>
           </h1>
           <p className="text-sm italic flex items-center gap-2 mb-6 text-slate-600 dark:text-slate-400">
@@ -87,7 +87,7 @@ export default function HeroSection() {
             Whisper your transactions into the chain — and let it travel unseen
           </p>
           <div className="flex gap-4 mb-8">
-            <Link href="https://whisper.ghosttx.me/">
+            <Link href="https://whisper.obscureproto.com /">
               <Button 
                 className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-lg px-8 py-6 h-auto rounded-xl shadow-lg shadow-purple-200/50 dark:from-purple-600 dark:to-pink-600 dark:shadow-purple-900/30"
               >

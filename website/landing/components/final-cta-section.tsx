@@ -14,7 +14,7 @@ export default function FinalCtaSection() {
               Make your next transaction disappear — and reappear as something more.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link href="https://whisper.ghosttx.me/">
+              <Link href="https://whisper.obscureproto.com /">
                 <Button 
                   className="bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-500 hover:to-pink-500 text-white text-lg px-8 py-6 h-auto rounded-xl shadow-lg shadow-purple-200/50 dark:from-purple-600 dark:to-pink-600 dark:shadow-purple-900/30"
                 >

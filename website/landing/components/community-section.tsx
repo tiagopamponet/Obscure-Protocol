@@ -12,7 +12,7 @@ export default function CommunitySection() {
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6">Community & Trust</h2>
         <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-          GhostTX is open for collaboration. Join our quest to bring real privacy and utility to Solana — peacefully,
+          Obscure Protocol is open for collaboration. Join our quest to bring real privacy and utility to Solana — peacefully,
           responsibly, and creatively.
         </p>
       </div>
@@ -30,13 +30,13 @@ export default function CommunitySection() {
             </div>
 
             <div className="flex flex-wrap gap-4">
-              <Link href="https://github.com/cadalt0/GhostTx" target="_blank" rel="noopener noreferrer">
+              <Link href="https://github.com/cadalt0/Obscure Protocol" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="flex items-center gap-2">
                   <Github className="h-5 w-5" />
                   GitHub
                 </Button>
               </Link>
-              <Link href="https://x.com/Ghost_TX_" target="_blank" rel="noopener noreferrer">
+              <Link href="https://x.com/obscureproto" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="flex items-center gap-2 text-[#1DA1F2] dark:text-[#1DA1F2]/80">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -55,7 +55,7 @@ export default function CommunitySection() {
                   Twitter
                 </Button>
               </Link>
-              <Link href="https://pepper-beaufort-d3d.notion.site/GhostTX-Documentation-18b19f511dce80938e25fa5a6c22e42e" target="_blank" rel="noopener noreferrer">
+              <Link href="https://pepper-beaufort-d3d.notion.site/Obscure Protocol-Documentation-18b19f511dce80938e25fa5a6c22e42e" target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5" />
                   Documentation

@@ -7,7 +7,7 @@ export function SecuritySection() {
         <div className="absolute -bottom-20 -right-20 w-40 h-40 bg-wave-pattern opacity-[0.05] rounded-full"></div>
 
         <p className="text-lg text-slate-600 dark:text-slate-300 mb-6 relative z-10">
-          In a world of constant surveillance, true privacy becomes a sanctuary. GhostTX was born from the belief that
+          In a world of constant surveillance, true privacy becomes a sanctuary. Obscure Protocol was born from the belief that
           financial privacy is a fundamental right, not a privilege.
         </p>
 

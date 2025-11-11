@@ -6,7 +6,7 @@ export default function BlockchainCouponSection() {
       <div className="text-center mb-16">
         <h2 className="text-3xl md:text-4xl font-bold text-slate-800 dark:text-slate-100 mb-6">From chain to charm</h2>
         <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
-          Your transaction enters the GhostTX cloak and reappears as a redeemable digital scroll
+          Your transaction enters the Obscure Protocol cloak and reappears as a redeemable digital scroll
         </p>
       </div>
 
@@ -18,7 +18,7 @@ export default function BlockchainCouponSection() {
               <span className="text-2xl font-medium text-purple-500">1</span>
             </div>
             <h3 className="text-xl font-medium text-slate-800 dark:text-slate-200 mb-2">Deposit</h3>
-            <p className="text-slate-600 dark:text-slate-300">Send your SOL to the GhostTX vault</p>
+            <p className="text-slate-600 dark:text-slate-300">Send your SOL to the Obscure Protocol vault</p>
           </div>
 
           <div className="hidden md:flex items-center justify-center">

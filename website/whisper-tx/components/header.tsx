@@ -30,11 +30,11 @@ export function Header() {
     >
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
-          <Link href="https://ghosttx.me" className="flex items-center hover:opacity-80 transition-opacity">
+          <Link href="https://obscureproto.com " className="flex items-center hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 rounded-full bg-purple-200 dark:bg-purple-900 flex items-center justify-center mr-3">
               <Ghost className="h-6 w-6 text-purple-500" />
             </div>
-            <span className="font-serif text-xl text-slate-800 dark:text-white hidden sm:inline-block">GhostTX</span>
+            <span className="font-serif text-xl text-slate-800 dark:text-white hidden sm:inline-block">Obscure Protocol</span>
           </Link>
 
           {isMobile ? (

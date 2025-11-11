@@ -1,7 +1,7 @@
 {
-  "name": "ghost-tx-server",
+  "name": "obscure-protocol-server",
   "version": "1.0.0",
-  "description": "Ghost Transaction Server with Wallet Codes and Transaction Stats",
+  "description": "Obscure Protocol Server with Wallet Codes and Transaction Stats",
   "main": "dist/index.js",
   "scripts": {
     "start": "node dist/index.js",
