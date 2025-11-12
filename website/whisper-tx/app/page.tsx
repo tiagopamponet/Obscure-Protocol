@@ -1,3 +1,5 @@
+"use client"
+
 import { Header } from "@/components/header"
 import { HomeCards } from "@/components/home-cards"
 import { LearnSection } from "@/components/learn-section"
@@ -5,8 +7,24 @@ import { FaqAccordion } from "@/components/faq-accordion"
 import { SecuritySection } from "@/components/security-section"
 import { Footer } from "@/components/footer"
 import { SummonGhostButton } from "@/components/summon-ghost-button"
+import ClaimModal from "@/components/ClaimModal"
+import { useEffect, useState } from "react"
 
 export default function Home() {
+  const [showClaim, setShowClaim] = useState(false)
+  const [claimCode, setClaimCode] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search)
+      const code = params.get("claimCode")
+      if (code) {
+        setClaimCode(code)
+        setShowClaim(true)
+      }
+    }
+  }, [])
+
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-pink-50 dark:from-slate-950 dark:to-purple-950 relative overflow-hidden">
       <div className="absolute inset-0 bg-sakura-pattern opacity-[0.05] pointer-events-none z-0"></div>
@@ -32,6 +50,9 @@ export default function Home() {
 
       <Footer />
       <SummonGhostButton />
+      {showClaim && claimCode && (
+        <ClaimModal code={claimCode} open={showClaim} onClose={() => setShowClaim(false)} />
+      )}
     </main>
   )
 }
