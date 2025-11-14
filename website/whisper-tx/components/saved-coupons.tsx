@@ -42,9 +42,11 @@ export function SavedCoupons({ open, onOpenChange, coupons, isLoading, hasMore, 
     setTimeout(() => setCopiedCode(null), 500)
   }
 
-  const handleLink = (code: string) => {
-    setLinkedCode(code)
-    setTimeout(() => setLinkedCode(null), 500)
+  const copyClaimLink = (code: string) => {
+    const claimLink = `${window.location.origin}/?claimCode=${code}`;
+    navigator.clipboard.writeText(claimLink);
+    setLinkedCode(code);
+    setTimeout(() => setLinkedCode(null), 1000);
   }
 
   const handleNotify = (code: string) => {
@@ -179,7 +181,8 @@ export function SavedCoupons({ open, onOpenChange, coupons, isLoading, hasMore, 
                             ? 'bg-blue-900 text-blue-50 dark:bg-blue-900 dark:text-blue-400' 
                             : 'hover:bg-violet-100 dark:hover:bg-violet-900'
                         }`}
-                        onClick={() => handleLink(coupon.value)}
+                        onClick={() => copyClaimLink(coupon.value)}
+                        title="Copy claim link"
                       >
                         <LinkIcon className="h-4 w-4" />
                       </Button>

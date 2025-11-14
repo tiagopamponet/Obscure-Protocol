@@ -13,7 +13,7 @@ export function LearnSection() {
       <section className="text-center">
         <h2 className="text-3xl font-serif text-slate-800 dark:text-white mb-6">How It Works</h2>
         <p className="text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8">
-          GhostTX uses advanced cryptography to ensure your transactions remain private and unlinkable.
+          Obscure Protocol uses advanced cryptography to ensure your transactions remain private and unlinkable.
         </p>
 
         <Button
@@ -28,7 +28,7 @@ export function LearnSection() {
         <DialogContent className="sm:max-w-[90%] md:max-w-[700px] rounded-2xl bg-gradient-to-b from-white to-pink-50 dark:from-slate-900 dark:to-purple-950 border border-purple-100 dark:border-purple-800">
           <DialogHeader>
             <DialogTitle className="text-2xl font-serif text-center text-slate-800 dark:text-white">
-              How GhostTX Works
+              How Obscure Protocol Works
             </DialogTitle>
             <DialogDescription className="text-center text-slate-600 dark:text-slate-300 font-zen">
               Understanding the privacy mechanics behind your transactions
@@ -66,7 +66,7 @@ export function LearnSection() {
                 <h3 className="font-serif text-lg text-slate-800 dark:text-white">Where is your data stored?</h3>
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-300">
-                GhostTX doesn't store any user data. The only data stored on-chain is a cryptographic hash of your
+                Obscure Protocol doesn't store any user data. The only data stored on-chain is a cryptographic hash of your
                 coupon code, which cannot be reversed to find your code. If you choose to save your coupons, they're
                 encrypted and only accessible with your wallet.
               </p>

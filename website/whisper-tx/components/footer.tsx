@@ -10,12 +10,12 @@ export function Footer() {
             <div className="w-8 h-8 rounded-full bg-purple-200 dark:bg-purple-900 flex items-center justify-center mr-2">
               <Ghost className="h-5 w-5 text-purple-500" />
             </div>
-            <span className="font-serif text-lg text-slate-800 dark:text-white">GhostTX</span>
+            <span className="font-serif text-lg text-slate-800 dark:text-white">Obscure Protocol</span>
           </div>
 
           <div className="flex space-x-6 mb-6 md:mb-0">
             <Link
-              href="https://github.com/cadalt0/GhostTx"
+              href="https://github.com/cadalt0/Obscure Protocol"
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 transition-colors"
@@ -24,7 +24,7 @@ export function Footer() {
               <span className="sr-only">GitHub</span>
             </Link>
             <Link
-              href="https://pepper-beaufort-d3d.notion.site/GhostTX-Documentation-18b19f511dce80938e25fa5a6c22e42e"
+              href="https://pepper-beaufort-d3d.notion.site/Obscure Protocol-Documentation-18b19f511dce80938e25fa5a6c22e42e"
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 transition-colors"
@@ -33,7 +33,7 @@ export function Footer() {
               <span className="sr-only">Docs</span>
             </Link>
             <Link
-              href="https://x.com/Ghost_TX_"
+              href="https://x.com/obscureproto"
               target="_blank"
               rel="noopener noreferrer"
               className="text-slate-600 hover:text-purple-600 dark:text-slate-300 dark:hover:text-purple-400 transition-colors"
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
 
           <div className="text-sm text-slate-500 dark:text-slate-400">
-            &copy; {new Date().getFullYear()} GhostTX. All rights reserved.
+            &copy; {new Date().getFullYear()} Obscure Protocol. All rights reserved.
           </div>
         </div>
       </div>

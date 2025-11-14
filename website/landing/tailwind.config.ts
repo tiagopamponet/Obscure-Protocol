@@ -52,7 +52,7 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom colors for GhostTX
+        // Custom colors for Obscure Protocol
         lavender: {
           "50": "#f5f3ff",
           "100": "#ede9fe",

@@ -56,3 +56,11 @@ Cargo.lock
 .anchor/
 .solana/
 test-ledger/
+
+# Website
+website/landing/node_modules
+website/landing/.next
+website/whisper-tx/node_modules
+website/whisper-tx/.next
+website/servers/node_modules
+website/servers/.next

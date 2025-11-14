@@ -13,7 +13,7 @@ export default function CouponShowcaseSection() {
             Every hidden transfer becomes a charm
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
-            GhostTX converts your anonymous deposits into onchain-secured crypto coupons — unique digital scrolls that
+            Obscure Protocol converts your anonymous deposits into onchain-secured crypto coupons — unique digital scrolls that
             hold value.
           </p>
 

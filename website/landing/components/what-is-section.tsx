@@ -9,7 +9,7 @@ export default function WhatIsSection() {
           <div className="relative">
             <Image
               src="/2ndscroll.webp?height=350&width=450"
-              alt="Ghost cloak wrapping a Solana coin"
+              alt="Obscure cloak wrapping a Solana coin"
               width={500}
               height={400}
               className="rounded-xl"
@@ -21,7 +21,7 @@ export default function WhatIsSection() {
             Transfer value without a trace
           </h2>
           <p className="text-lg text-slate-600 dark:text-slate-300 mb-6 leading-relaxed">
-            GhostTX lets you move assets anonymously across the Solana blockchain — wrapped in a soft cloak of privacy
+            Obscure Protocol lets you move assets anonymously across the Solana blockchain — wrapped in a soft cloak of privacy
           </p>
           <p className="text-lg text-slate-600 dark:text-slate-300 mb-8 leading-relaxed">
             Instead of direct transfers, your SOL enters a secure pool and re-emerges elsewhere, unlinkable and

@@ -18,7 +18,7 @@ const zenMaruGothic = Zen_Maru_Gothic({
 })
 
 export const metadata: Metadata = {
-  title: "GhostTX - Anonymous Solana Transactions",
+  title: "Obscure Protocol - Anonymous Solana Transactions",
   description: "Send or redeem your SOL in silence — no identity, no trail.",
     generator: 'v0.dev'
 }

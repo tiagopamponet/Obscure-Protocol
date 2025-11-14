@@ -1,6 +1,6 @@
-# GhostTx - Privacy transaction layer on Solana 
+# Obscure Protocol - Privacy transaction layer on Solana 
 
-[GhostTx](https://ghosttx.me) is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
+[Obscure Protocol](https://obscureproto.com ) is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
 
 Smart contract address: [8KYeVB9iPLgy3h33BQAwUJCTWc1hvzrcpvMxSNjTXnFf](https://explorer.solana.com/address/8KYeVB9iPLgy3h33BQAwUJCTWc1hvzrcpvMxSNjTXnFf?cluster=devnet)
 
@@ -14,16 +14,9 @@ Withdraw onchain code used Proof : [2Dx1FfUemXXXWZP4LMNDpq1dfwoCBocEZNKkXVozLYeV
 
 PDA : [2pf7Zx4PitoVB5rJZvGvm2jxKVH8A68uA5StujXdkiP3](https://explorer.solana.com/address/2pf7Zx4PitoVB5rJZvGvm2jxKVH8A68uA5StujXdkiP3?cluster=devnet)
 
-# GhostTX “How to Use” 
-[Read on Notion](https://pepper-beaufort-d3d.notion.site/GhostTX-How-to-Use-18b19f511dce80938e25fa5a6c22e42e)
+Welcome to Obscure Protocol This guide will help you understand how to use our platform.
 
-Or
-
- # How to Use GhostTx
-
-Welcome to GhostTx This guide will help you understand how to use our platform.
-
-Go to GhostTX Whisper [page](https://whisper.ghosttx.me)
+Go to Obscure Protocol Whisper [page](https://whisper.obscureproto.com )
 ```
 ## Getting Started
 
@@ -95,11 +88,11 @@ If you encounter any issues or have questions:
 - Stay updated with platform announcements and updates
 - Always verify your coupon code is saved before closing the deposit window
 
-Remember: GhostTx is designed to be user-friendly while maintaining the highest security standards. Take your time to understand each feature before proceeding with transactions. ```
+Remember: Obscure Protocol is designed to be user-friendly while maintaining the highest security standards. Take your time to understand each feature before proceeding with transactions. ```
 
 ```
 
-## Structure of GhostTX Internal Function
+## Structure of Obscure Protocol Internal Function
 
 
 ![image](https://github.com/user-attachments/assets/d291a549-b5a5-4bbc-a3b4-2d0b44d47c14)

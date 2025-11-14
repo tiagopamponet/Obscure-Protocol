@@ -33,10 +33,10 @@ export function FaqAccordion() {
 
           <AccordionItem value="item-3" className="border-purple-100 dark:border-purple-900">
             <AccordionTrigger className="text-slate-800 dark:text-white font-medium hover:text-purple-700 dark:hover:text-purple-400">
-              Is GhostTX legal?
+              Is Obscure Protocol legal?
             </AccordionTrigger>
             <AccordionContent className="text-slate-600 dark:text-slate-300">
-              GhostTX is a privacy tool, not a means to evade legal obligations. While privacy is a fundamental right,
+              Obscure Protocol is a privacy tool, not a means to evade legal obligations. While privacy is a fundamental right,
               users are responsible for complying with all applicable laws in their jurisdictions, including tax laws
               and anti-money laundering regulations.
             </AccordionContent>
@@ -44,10 +44,10 @@ export function FaqAccordion() {
 
           <AccordionItem value="item-4" className="border-purple-100 dark:border-purple-900">
             <AccordionTrigger className="text-slate-800 dark:text-white font-medium hover:text-purple-700 dark:hover:text-purple-400">
-              Does GhostTX store any user data?
+              Does Obscure Protocol store any user data?
             </AccordionTrigger>
             <AccordionContent className="text-slate-600 dark:text-slate-300">
-              GhostTX does not store any user data that could identify you or link your deposits to withdrawals. The
+              Obscure Protocol does not store any user data that could identify you or link your deposits to withdrawals. The
               only data stored on-chain is a cryptographic hash of your coupon code, which cannot be reversed to find
               your original code or connect it to your identity.
             </AccordionContent>
