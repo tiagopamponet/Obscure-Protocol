@@ -1,4 +1,4 @@
-# Obscure Protocol - Privacy transaction layer on Solana 
+# Obscure Protocol - Privacy transaction layer on Solana!
 
 [Obscure Protocol](https://obscureproto.com ) is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
 
