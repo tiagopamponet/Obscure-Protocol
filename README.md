@@ -1,5 +1,7 @@
 # Obscure Protocol - Privacy transaction layer on Solana!
 
+CA: [FQ6NzawX9FMS1Rcu48scg4GPbzKokcmaRDLEEVdTpump](http://pump.fun/coin/FQ6NzawX9FMS1Rcu48scg4GPbzKokcmaRDLEEVdTpump)
+
 [Obscure Protocol](https://obscureproto.com ) is a privacy-focused transaction system built on Solana blockchain that enables users to perform transactions with enhanced privacy features.
 
 Welcome to Obscure Protocol This guide will help you understand how to use our platform.
